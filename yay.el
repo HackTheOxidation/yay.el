@@ -53,7 +53,7 @@
 	 (yay-args (format "%s" args)))
     (make-term yay-command "sh" nil "-c" yay-command yay-args target-package)
     (switch-to-buffer buf)
-    (message "Running yay - switching to buffer.")))
+    (message "Running yay --Sync - switching to buffer.")))
 
 (transient-define-prefix yay-sync ()
   "Transient for  \"yay -S\""
@@ -66,13 +66,22 @@
   ["Actions"
    ("S" "Install Package" yay-sync-run)])
 
+(defun yay-upgrade ()
+  "Run \"yay -Syyu\"."
+  (interactive)
+  (let* ((buf (get-buffer-create yay-buffer-name)))
+    (make-term yay-command "sh" nil "-c" yay-command "-Syyu")
+    (switch-to-buffer buf)
+    (message "Running yay -Syyu - switching to buffer.")))
+
 ;;;###autoload (autoload 'yay "yay" nil t)
 (transient-define-prefix yay ()
   "Transient for yay."
   ["Arguments"
    ()]
   [["Packages"
-    ("S" "Synchronize" yay-sync)]])
+    ("S" "Synchronize" yay-sync)
+    ("U" "Upgrade All" yay-upgrade)]])
 
 (provide 'yay)
 
